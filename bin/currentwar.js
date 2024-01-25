@@ -13,6 +13,7 @@ dayjs.extend(timezone);
 
 const url = process.env.url;
 const tz = 'Asia/Shanghai';
+const fileName = 'currentwar.txt';
 
 async function queryCoc() {
   const response = await fetch(`${url}/currentwar`);
@@ -20,13 +21,12 @@ async function queryCoc() {
 }
 
 queryCoc().then((res) => {
-  console.log(res);
   if (res.state === 'notInWar') {
-    fs.writeFileSync('currentwar.text', '尚未开战\n');
     console.log('尚未开战');
     return;
   }
-  const { clan, startTime, endTime } = res;
+  console.log(res);
+  const { clan, startTime, endTime, opponent } = res;
   const { members } = clan;
 
   const startTimeUTC = formatString2UTC(startTime);
@@ -34,6 +34,7 @@ queryCoc().then((res) => {
   const st = dayjs.utc(startTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
   const et = dayjs.utc(endTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
 
+  let text = '';
   const membersOrders = members.sort((a, b) => a.mapPosition - b.mapPosition);
   const membersNames = membersOrders.map((m) => m.name);
   const membersAttacks = [];
@@ -45,16 +46,23 @@ queryCoc().then((res) => {
       membersNoAttacks.push(m.name);
     }
   });
-  let text = '';
-  text = text + `开始时间：${st}\n`;
-  text = text + `结束时间：${et}\n`;
-  text = text + '\n';
-  membersNames.forEach((m) => (text = text + m + '\n'));
-  text = text + '\n';
-  text = text + `有进攻人员(${membersAttacks.length})\n`;
-  membersAttacks.forEach((m) => (text = text + m + '\n'));
-  text = text + '\n';
-  text = text + `未进攻人员(${membersNoAttacks.length})\n`;
-  membersNoAttacks.forEach((m) => (text = text + m + '\n'));
-  fs.writeFileSync('currentwar.txt', text);
+
+  const isStart = dayjs().isAfter(dayjs(st));
+  if (isStart) {
+    text = text + `开始时间：${st}\n`;
+    text = text + `结束时间：${et}\n`;
+    text = text + `我方星星✨: ${clan.stars} 对方星星✨: ${opponent.stars}\n`;
+    text = text + '\n';
+    text = text + `有进攻人员(${membersAttacks.length})\n`;
+    membersAttacks.forEach((m) => (text = text + m + '\n'));
+    text = text + '\n';
+    text = text + `未进攻人员(${membersNoAttacks.length})\n`;
+    membersNoAttacks.forEach((m) => (text = text + m + '\n'));
+  } else {
+    text = text + `参赛人员：\n`;
+    membersNames.forEach((m) => (text = text + m + '\n'));
+    text = text + '\n';
+  }
+
+  fs.writeFileSync(fileName, text);
 });
