@@ -25,13 +25,34 @@ app.get('/', (_, res) => {
   res.send('hello world');
 });
 
-app.get('/currentwar', async (req, res) => {
-  const respose = await fetch(`https://api.clashofclans.com/v1/clans/%23${tag}/currentwar`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+app.get('/currentwar', async (_, res) => {
+  const respose = await fetch(
+    `https://api.clashofclans.com/v1/clans/%23${tag}/currentwar`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   const r = await respose.json();
+  console.log(r);
+  res.send(r);
+});
+
+app.get('/generateToken', async (_, res) => {
+  const data = {
+    email: '',
+    password: '',
+  };
+  const result = await fetch('https://developer.clashofclans.com/api/login', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  const r = await result.json();
   console.log(r);
   res.send(r);
 });

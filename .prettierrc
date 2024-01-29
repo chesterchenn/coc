@@ -1,0 +1,31 @@
+# 以 Airbnb JavaScript Style Guide 作为标准
+
+# 最大宽度即 max len
+printWidth: 80
+
+# 添加分号
+semi: true
+
+# 缩进空格数
+tabWidth: 2
+
+# 使用空格缩进
+useTabs: false
+
+# 对象两端的空格
+bracketSpacing: true
+
+# 使用单引号
+singleQuote: true
+
+# jsx 使用单引号
+jsxSingleQuote: false
+
+# 对象中的属性使用引号
+quoteProps: 'as-needed'
+
+# 箭头函数使用圆括号包裹
+arrowParens: 'always'
+
+# 多行结尾添加逗号
+trailingComma: 'all'
