@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
-    "cw": "node bin/currentwar.js"
+    "cw": "node bin/currentwar.js",
+    "cw:all": "SHOW=all node bin/currentwar.js "
   },
   "type": "module",
   "keywords": [],

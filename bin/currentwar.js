@@ -12,7 +12,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const url = process.env.url;
+const showName = process.env.SHOW;
 const tz = 'Asia/Shanghai';
+dayjs.tz.setDefault(tz);
 const fileName = 'currentwar.txt';
 
 async function queryCoc() {
@@ -34,7 +36,6 @@ queryCoc().then((res) => {
   const st = dayjs.utc(startTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
   const et = dayjs.utc(endTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
 
-  let text = '';
   const membersOrders = members.sort((a, b) => a.mapPosition - b.mapPosition);
   const membersNames = membersOrders.map((m) => m.name);
   const membersAttacks = [];
@@ -47,10 +48,13 @@ queryCoc().then((res) => {
     }
   });
 
-  const isStart = dayjs().isAfter(dayjs(st));
+  let text = '';
+  text = text + `开始时间：${st}\n`;
+  text = text + `结束时间：${et}\n`;
+
+  const now = dayjs().format('YYYY-MM-DD HH:mm');
+  const isStart = dayjs(now).isAfter(dayjs(st));
   if (isStart) {
-    text = text + `开始时间：${st}\n`;
-    text = text + `结束时间：${et}\n`;
     text = text + `我方星星✨: ${clan.stars} 对方星星✨: ${opponent.stars}\n`;
     text = text + '\n';
     text = text + `有进攻人员(${membersAttacks.length})\n`;
@@ -58,7 +62,10 @@ queryCoc().then((res) => {
     text = text + '\n';
     text = text + `未进攻人员(${membersNoAttacks.length})\n`;
     membersNoAttacks.forEach((m) => (text = text + m + '\n'));
-  } else {
+    text = text + '\n';
+  }
+
+  if (!isStart || showName === 'all') {
     text = text + `参赛人员：\n`;
     membersNames.forEach((m) => (text = text + m + '\n'));
     text = text + '\n';
