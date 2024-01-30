@@ -3,15 +3,18 @@ import express from 'express';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { rateLimit } from 'express-rate-limit';
+import generateToken from './generateToken.js';
+
 const envfile = path.resolve(process.cwd(), '.env');
 dotenv.config({
   path: envfile,
 });
 
-const app = express();
-const port = 3000;
+const port = process.env.port;
 const tag = process.env.tag;
 const token = process.env.token;
+
+const app = express();
 const limiter = rateLimit({
   windowMs: 5 * 60 * 1000,
   max: 10,
@@ -19,11 +22,6 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
-app.get('/', (_, res) => {
-  console.log('hello');
-  res.send('hello world');
-});
 
 app.get('/currentwar', async (_, res) => {
   const respose = await fetch(
@@ -34,28 +32,33 @@ app.get('/currentwar', async (_, res) => {
       },
     },
   );
-  const r = await respose.json();
-  console.log(r);
-  res.send(r);
-});
-
-app.get('/generateToken', async (_, res) => {
-  const data = {
-    email: '',
-    password: '',
-  };
-  const result = await fetch('https://developer.clashofclans.com/api/login', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
+  const result = await respose.json();
+  console.log(result);
+  if (result.state !== 'inWar') {
+    res.send(result);
+    return;
+  }
+  const { clan, opponent } = result;
+  const clanMembersOrders = clan.members.sort(
+    (a, b) => a.mapPosition - b.mapPosition,
+  );
+  const opponentMembersOrders = opponent.members.sort(
+    (a, b) => a.mapPosition - b.mapPosition,
+  );
+  res.send({
+    ...result,
+    members: {
+      ...clan,
+      members: clanMembersOrders,
     },
-    body: JSON.stringify(data),
+    opponent: {
+      ...opponent,
+      members: opponentMembersOrders,
+    },
   });
-
-  const r = await result.json();
-  console.log(r);
-  res.send(r);
 });
+
+app.use('/generateToken', generateToken);
 
 app.listen(port, () => {
   console.log(`Express app listen on port ${port}`);
