@@ -49,18 +49,22 @@ queryCoc().then((res) => {
   });
 
   let text = '';
-  text = text + `开始时间：${st}\n`;
-  text = text + `结束时间：${et}\n`;
+  text = text + `开始时间🕛 ${st}\n`;
+  text = text + `结束时间🕛 ${et}\n`;
 
   const now = dayjs().format('YYYY-MM-DD HH:mm');
   const isStart = dayjs(now).isAfter(dayjs(st));
   if (isStart) {
-    text = text + `我方星星✨: ${clan.stars} 对方星星✨: ${opponent.stars}\n`;
+    text = text + `我方星星✨ ${clan.stars} 对方星星✨ ${opponent.stars}\n`;
+    text =
+      text +
+      `我方摧毁率🎉 ${clan.destructionPercentage}% ` +
+      `对方摧毁率🎉 ${opponent.destructionPercentage}%\n`;
     text = text + '\n';
-    text = text + `有进攻人员(${membersAttacks.length})\n`;
+    text = text + `有进攻人员💀(${membersAttacks.length})\n`;
     membersAttacks.forEach((m) => (text = text + m + '\n'));
     text = text + '\n';
-    text = text + `未进攻人员(${membersNoAttacks.length})\n`;
+    text = text + `未进攻人员💫(${membersNoAttacks.length})\n`;
     membersNoAttacks.forEach((m) => (text = text + m + '\n'));
     text = text + '\n';
   }

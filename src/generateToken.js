@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 const router = express.Router();
@@ -100,7 +100,7 @@ router.get('/', async (req, res) => {
 
   // 添加指定的token
   const uuidKey = {
-    name: `auto-api-${uuid()}`,
+    name: `auto-api-${uuidv4()}`,
     description: 'auto api',
     cidrRanges: [ip],
     scopes: null,
