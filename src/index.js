@@ -4,6 +4,8 @@ import path from 'node:path';
 import dotenv from 'dotenv';
 import { rateLimit } from 'express-rate-limit';
 import generateToken from './generateToken.js';
+import cwl from './cwl.js';
+import currentwar from './currentwar.js';
 
 const envfile = path.resolve(process.cwd(), '.env');
 dotenv.config({
@@ -11,8 +13,6 @@ dotenv.config({
 });
 
 const port = process.env.port;
-const tag = process.env.tag;
-const token = process.env.token;
 
 const app = express();
 const limiter = rateLimit({
@@ -23,42 +23,11 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-app.get('/currentwar', async (_, res) => {
-  const respose = await fetch(
-    `https://api.clashofclans.com/v1/clans/%23${tag}/currentwar`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-  const result = await respose.json();
-  console.log(result);
-  if (result.state !== 'inWar') {
-    res.send(result);
-    return;
-  }
-  const { clan, opponent } = result;
-  const clanMembersOrders = clan.members.sort(
-    (a, b) => a.mapPosition - b.mapPosition,
-  );
-  const opponentMembersOrders = opponent.members.sort(
-    (a, b) => a.mapPosition - b.mapPosition,
-  );
-  res.send({
-    ...result,
-    members: {
-      ...clan,
-      members: clanMembersOrders,
-    },
-    opponent: {
-      ...opponent,
-      members: opponentMembersOrders,
-    },
-  });
-});
+app.use('/currentwar', currentwar);
 
 app.use('/generateToken', generateToken);
+
+app.use('/cwl', cwl);
 
 app.listen(port, () => {
   console.log(`Express app listen on port ${port}`);
