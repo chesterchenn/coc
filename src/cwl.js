@@ -73,7 +73,7 @@ router.get('/', async (req, res) => {
     );
     res.send({
       ...result,
-      members: {
+      clan: {
         ...clan,
         members: clanMembersOrders,
       },
