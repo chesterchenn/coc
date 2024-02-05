@@ -6,6 +6,7 @@ dotenv.config({
 });
 
 const url = process.env.url;
+// const url = 'http://localhost:3030';
 const tag = process.env.tag;
 const argv = process.argv.slice(2);
 

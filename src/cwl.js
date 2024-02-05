@@ -41,9 +41,24 @@ router.get('/', async (req, res) => {
   const { rounds } = leaguegroup;
 
   // 判断当前回合
-  // 寻找未开始的场次，如果有，则向前第二场为当前回合，如果没有，则最后一场为当前回合
+  // 寻找未开始的场次，如果有，则向前第二场为当前回合，如果没有，则为最后两场
   const index = rounds.findIndex((_r) => _r.warTags[0] === '#0');
-  const currentIndex = index === -1 ? rounds.length - 1 : index - 2;
+  let currentIndex = 0;
+  if (index === -1) {
+    const lastButOne = rounds.length - 2;
+    console.log(lastButOne);
+    const firstWar = rounds[lastButOne].warTags[0];
+    const firstResult = await queryWars(firstWar.slice(1));
+    console.log(firstResult);
+    if (firstResult.state === 'inWar') {
+      currentIndex = lastButOne;
+    } else {
+      currentIndex = rounds.length - 1;
+    }
+  } else {
+    currentIndex = index - 2;
+  }
+
   const { warTags } = queryRound
     ? rounds[queryRound - 1]
     : rounds[currentIndex];
