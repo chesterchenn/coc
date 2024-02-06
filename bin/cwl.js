@@ -7,7 +7,6 @@ dotenv.config({
 
 const url = process.env.url;
 // const url = 'http://localhost:3030';
-const tag = process.env.tag;
 const argv = process.argv.slice(2);
 
 async function queryCWL() {
@@ -35,12 +34,10 @@ queryCWL().then((res) => {
   console.log(res);
   let { clan, startTime, endTime, opponent } = res;
 
-  const [_clan, _opponent] =
-    clan.tag !== `#${tag}` ? [opponent, clan] : [clan, opponent];
   writeResult({
-    clan: _clan,
+    clan,
     startTime,
     endTime,
-    opponent: _opponent,
+    opponent,
   });
 });

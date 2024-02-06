@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import sortWart from './sortWar.js';
 
 dotenv.config();
 const router = express.Router();
@@ -46,10 +47,8 @@ router.get('/', async (req, res) => {
   let currentIndex = 0;
   if (index === -1) {
     const lastButOne = rounds.length - 2;
-    console.log(lastButOne);
     const firstWar = rounds[lastButOne].warTags[0];
     const firstResult = await queryWars(firstWar.slice(1));
-    console.log(firstResult);
     if (firstResult.state === 'inWar') {
       currentIndex = lastButOne;
     } else {
@@ -63,40 +62,20 @@ router.get('/', async (req, res) => {
     ? rounds[queryRound - 1]
     : rounds[currentIndex];
 
-  let result;
-  Promise.all(
+  const wars = await Promise.all(
     warTags.map((wTag) => {
       return queryWars(wTag.slice(1));
     }),
-  ).then((wars) => {
-    wars.forEach((war) => {
-      if (war.clan.tag === `#${tag}` || war.opponent.tag === `#${tag}`) {
-        result = war;
+  );
+  wars.forEach((war) => {
+    if (war.clan.tag === `#${tag}` || war.opponent.tag === `#${tag}`) {
+      if (war.state === 'notInWar') {
+        res.send(war);
+        return;
       }
-    });
-    console.log(result);
-    if (result.state === 'notInWar') {
+      const result = sortWart(war);
       res.send(result);
-      return;
     }
-    const { clan, opponent } = result;
-    const clanMembersOrders = clan.members.sort(
-      (a, b) => a.mapPosition - b.mapPosition,
-    );
-    const opponentMembersOrders = opponent.members.sort(
-      (a, b) => a.mapPosition - b.mapPosition,
-    );
-    res.send({
-      ...result,
-      clan: {
-        ...clan,
-        members: clanMembersOrders,
-      },
-      opponent: {
-        ...opponent,
-        members: opponentMembersOrders,
-      },
-    });
   });
 });
 

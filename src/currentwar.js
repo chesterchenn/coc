@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import sortWart from './sortWar.js';
 
 dotenv.config();
 const router = express.Router();
@@ -27,24 +28,8 @@ router.get('/', async (_, res) => {
     res.send(result);
     return;
   }
-  const { clan, opponent } = result;
-  const clanMembersOrders = clan.members.sort(
-    (a, b) => a.mapPosition - b.mapPosition,
-  );
-  const opponentMembersOrders = opponent.members.sort(
-    (a, b) => a.mapPosition - b.mapPosition,
-  );
-  res.send({
-    ...result,
-    clan: {
-      ...clan,
-      members: clanMembersOrders,
-    },
-    opponent: {
-      ...opponent,
-      members: opponentMembersOrders,
-    },
-  });
+  const sortResult = sortWart(result);
+  res.send(sortResult);
 });
 
 export default router;

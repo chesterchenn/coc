@@ -28,11 +28,10 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
   const st = dayjs.utc(startTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
   const et = dayjs.utc(endTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');
 
-  const membersOrders = members.sort((a, b) => a.mapPosition - b.mapPosition);
-  const membersNames = membersOrders.map((m) => m.name);
+  const membersNames = members.map((m) => m.name);
   const membersAttacks = [];
   const membersNoAttacks = [];
-  membersOrders.forEach((m) => {
+  members.forEach((m) => {
     if (m.attacks) {
       membersAttacks.push(`${m.name}(${m.attacks.length})`);
     } else {
