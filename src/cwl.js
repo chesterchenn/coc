@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import sortWart from './sortWar.js';
+import resultProcess from './resultProcess.js';
 
 dotenv.config();
 const router = express.Router();
@@ -39,6 +39,10 @@ async function queryWars(warTag) {
 router.get('/', async (req, res) => {
   const queryRound = req.query.round;
   const leaguegroup = await queryLeagueGroup();
+  if (leaguegroup.reason === 'notFound') {
+    res.send(leaguegroup);
+    return;
+  }
   const { rounds } = leaguegroup;
 
   // 判断当前回合
@@ -69,11 +73,7 @@ router.get('/', async (req, res) => {
   );
   wars.forEach((war) => {
     if (war.clan.tag === `#${tag}` || war.opponent.tag === `#${tag}`) {
-      if (war.state === 'notInWar') {
-        res.send(war);
-        return;
-      }
-      const result = sortWart(war);
+      const result = resultProcess(war);
       res.send(result);
     }
   });

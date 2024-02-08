@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import sortWart from './sortWar.js';
+import resultProcess from './resultProcess.js';
 
 dotenv.config();
 const router = express.Router();
@@ -22,13 +22,9 @@ async function queryCurrentWar() {
 }
 
 router.get('/', async (_, res) => {
-  const result = queryCurrentWar();
+  const result = await queryCurrentWar();
   console.log(result);
-  if (result.state === 'notInWar') {
-    res.send(result);
-    return;
-  }
-  const sortResult = sortWart(result);
+  const sortResult = resultProcess(result);
   res.send(sortResult);
 });
 

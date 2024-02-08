@@ -27,7 +27,11 @@ async function queryCWL() {
 }
 
 queryCWL().then((res) => {
-  if (res.state === 'notInWar') {
+  if (res.reason === 'accessDenied') {
+    console.log('访问权限受限');
+    return;
+  }
+  if (res.reason === 'notFound') {
     console.log('尚未开战');
     return;
   }
