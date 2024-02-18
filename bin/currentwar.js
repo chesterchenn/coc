@@ -18,7 +18,7 @@ queryCoc().then((res) => {
     console.log('访问权限受限');
     return;
   }
-  if (res.state === 'notInwar') {
+  if (res.state === 'notInWar') {
     console.log('尚未开战');
     return;
   }
