@@ -22,7 +22,6 @@ queryCoc().then((res) => {
     console.log('尚未开战');
     return;
   }
-  console.log(res);
   const { clan, startTime, endTime, opponent } = res;
 
   writeResult({

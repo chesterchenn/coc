@@ -23,7 +23,6 @@ async function queryCurrentWar() {
 
 router.get('/', async (_, res) => {
   const result = await queryCurrentWar();
-  console.log(result);
   const sortResult = resultProcess(result);
   res.send(sortResult);
 });
