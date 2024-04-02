@@ -58,6 +58,8 @@ router.get('/', async (req, res) => {
     } else {
       currentIndex = rounds.length - 1;
     }
+  } else if (index - 2 < 0) {
+    currentIndex = 0;
   } else {
     currentIndex = index - 2;
   }
