@@ -34,11 +34,14 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
   text = text + `结束时间🕛 ${et}\n`;
   text = text + `查询时间🕛 ${now}\n\n`;
 
-  // 未开战只返回参赛人员
   if (!isStart || showName === 'all') {
     text = text + `参赛人员：\n`;
     membersNames.forEach((m) => (text = text + m + '\n'));
     text = text + '\n';
+  }
+
+  // 未开战只返回参赛人员
+  if (!isStart) {
     fs.writeFileSync(fileName, text);
     return;
   }
@@ -69,7 +72,7 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
       ...m,
       output: `${m.mapPosition.toString().padStart(2, '0')}号: ${m.name}(${
         m.bestOpponentAttack ? m.bestOpponentAttack.stars : 0
-      })`,
+      })[${m.townhallLevel}本]`,
     }));
 
   // 摧毁率精确到小数点后两位
