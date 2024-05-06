@@ -53,7 +53,7 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
     .filter((m) => m.attacks)
     .map(
       (m) =>
-        `${m.mapPosition.toString().padStart(2, '0')}号: ${m.name}(${
+        `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
           m.attacks.length
         })`,
     );
@@ -62,7 +62,7 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
    */
   const membersNoAttacks = clan.members
     .filter((m) => !m.attacks)
-    .map((m) => `${m.mapPosition.toString().padStart(2, '0')}号: ${m.name}`);
+    .map((m) => `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}`);
   /**
    * 未摧毁的对手
    */
@@ -70,7 +70,7 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
     .filter((m) => !m.bestOpponentAttack || m.bestOpponentAttack.stars !== 3)
     .map((m) => ({
       ...m,
-      output: `${m.mapPosition.toString().padStart(2, '0')}号: ${m.name}(${
+      output: `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
         m.bestOpponentAttack ? m.bestOpponentAttack.stars : 0
       })[${m.townhallLevel}本]`,
     }));

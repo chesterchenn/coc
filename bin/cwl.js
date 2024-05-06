@@ -35,7 +35,7 @@ queryCWL().then((res) => {
     console.log('尚未开战');
     return;
   }
-  console.log(res);
+  // console.log(res);
   let { clan, startTime, endTime, opponent } = res;
 
   writeResult({
