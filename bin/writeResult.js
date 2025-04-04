@@ -12,6 +12,7 @@ dotenv.config({
 const showName = process.env.SHOW;
 const fileName = 'result.txt';
 const tz = 'Asia/Shanghai';
+const isCWL = process.env.npm_lifecycle_event === 'cwl';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -50,7 +51,15 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
    * 进攻的人员
    */
   const membersAttacks = clan.members
-    .filter((m) => m.attacks)
+    .filter((m) => m.attacks && m.attacks.length > 1)
+    .map(
+      (m) =>
+        `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
+          m.attacks.length
+        })`,
+    );
+  const membersPartlyAttacks = clan.members
+    .filter((m) => m.attacks && m.attacks.length === 1)
     .map(
       (m) =>
         `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
@@ -72,7 +81,9 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
       ...m,
       output: `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
         m.bestOpponentAttack ? m.bestOpponentAttack.stars : 0
-      })[${m.townhallLevel}本]`,
+      })[${m.townhallLevel}本][${
+        m.bestOpponentAttack ? m.bestOpponentAttack.destructionPercentage : 100
+      }%]`,
     }));
 
   // 摧毁率精确到小数点后两位
@@ -82,9 +93,19 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
   text = text + `我方星星✨ ${clan.stars} 对方星星✨ ${opponent.stars}\n`;
   text = text + `我方摧毁率🎉 ${clanDes}% ` + `对方摧毁率🎉 ${opponentDes}%\n`;
   text = text + '\n';
-  text = text + `有进攻人员🔥(${membersAttacks.length})\n`;
-  membersAttacks.forEach((m) => (text = text + m + '\n'));
-  text = text + '\n';
+  if (isCWL) {
+    text = text + `全部进攻人员🔥(${membersPartlyAttacks.length})\n`;
+    membersPartlyAttacks.forEach((m) => (text = text + m + '\n'));
+    text = text + '\n';
+  }
+  if (!isCWL) {
+    text = text + `全部进攻人员🔥(${membersAttacks.length})\n`;
+    membersAttacks.forEach((m) => (text = text + m + '\n'));
+    text = text + '\n';
+    text = text + `部分进攻人员🔥(${membersPartlyAttacks.length})\n`;
+    membersPartlyAttacks.forEach((m) => (text = text + m + '\n'));
+    text = text + '\n';
+  }
   text = text + `未进攻人员💫(${membersNoAttacks.length})\n`;
   membersNoAttacks.forEach((m) => (text = text + m + '\n'));
   text = text + '\n';
