@@ -82,7 +82,7 @@ export function writeResult({ clan, startTime, endTime, opponent }) {
       output: `${m.mapIndex.toString().padStart(2, '0')}号: ${m.name}(${
         m.bestOpponentAttack ? m.bestOpponentAttack.stars : 0
       })[${m.townhallLevel}本][${
-        m.bestOpponentAttack ? m.bestOpponentAttack.destructionPercentage : 100
+        m.bestOpponentAttack ? m.bestOpponentAttack.destructionPercentage : 0
       }%]`,
     }));
 
