@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import resultProcess from './resultProcess.js';
+import resultProcess from './resultProcess';
 
 dotenv.config();
 const router = express.Router();

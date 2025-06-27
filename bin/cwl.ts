@@ -10,7 +10,7 @@ const url = process.env.url;
 const argv = process.argv.slice(2);
 
 async function queryCWL() {
-  if (argv.legnth === 0) {
+  if (argv.length === 0) {
     const response = await fetch(`${url}/cwl`);
     return response.json();
   }
@@ -35,13 +35,6 @@ queryCWL().then((res) => {
     console.log('尚未开战');
     return;
   }
-  // console.log(res);
-  let { clan, startTime, endTime, opponent } = res;
 
-  writeResult({
-    clan,
-    startTime,
-    endTime,
-    opponent,
-  });
+  writeResult(res);
 });

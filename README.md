@@ -81,3 +81,4 @@ password=''
 - [x] 接口排序优化（mapPosition, 联赛补充上场序号）
 - [ ] 使用手册
 - [x] 优化开发体验（NODE_ENV, env 文件的生成）
+- [ ] TS 化

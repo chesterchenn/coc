@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "cw": "node bin/currentwar.js",
-    "cw:all": "SHOW=all node bin/currentwar.js ",
-    "cwl": "node bin/cwl.js",
-    "cwl:all": "SHOW=all node bin/cwl.js"
+    "start": "nodemon src/index.ts",
+    "cw": "tsx bin/currentwar.ts",
+    "cw:all": "SHOW=all node bin/currentwar.ts",
+    "cwl": "node bin/cwl.ts",
+    "cwl:all": "SHOW=all node bin/cwl.ts"
   },
   "type": "module",
   "keywords": [],
@@ -23,6 +23,9 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.4",
+    "nodemon": "^3.0.3",
+    "tsx": "^4.20.3"
   }
 }

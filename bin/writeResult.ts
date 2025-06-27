@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import { envfile } from '../config/paths.js';
 import dotenv from 'dotenv';
+import { QueryResult } from '../types/index.js';
 
 dotenv.config({
   path: envfile,
@@ -21,7 +22,8 @@ dayjs.tz.setDefault(tz);
 /**
  * 写入结果
  */
-export function writeResult({ clan, startTime, endTime, opponent }) {
+export function writeResult(raw: QueryResult) {
+  const { clan, startTime, endTime, opponent } = raw;
   const startTimeUTC = formatString2UTC(startTime);
   const endTimeUTC = formatString2UTC(endTime);
   const st = dayjs.utc(startTimeUTC).tz(tz).format('YYYY-MM-DD HH:mm');

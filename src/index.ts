@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import express from 'express';
 import path from 'node:path';
 import dotenv from 'dotenv';

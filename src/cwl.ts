@@ -25,7 +25,7 @@ async function queryLeagueGroup() {
 /**
  * 查询联赛的战斗
  */
-async function queryWars(warTag) {
+async function queryWars(warTag: string) {
   const res = await fetch(`${url}/clanwarleagues/wars/%23${warTag}`, {
     method: 'GET',
     headers: {
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
     : rounds[currentIndex];
 
   const wars = await Promise.all(
-    warTags.map((wTag) => {
+    warTags.map((wTag: string) => {
       return queryWars(wTag.slice(1));
     }),
   );
