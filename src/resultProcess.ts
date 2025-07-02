@@ -8,7 +8,6 @@ const tag = process.env.tag;
  * 将结果依据 mapPosition 排序，添加 mapIndex，并将部落放入 clan 对象
  */
 function resultProcess(raw: QueryResult) {
-  console.log(raw);
   if (raw.reason === 'accessDenied') {
     return raw;
   }

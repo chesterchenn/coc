@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import resultProcess from './resultProcess.js';
+import resultProcess from './resultProcess';
+import { CWLResult } from 'types/index';
 
 dotenv.config();
 const router = express.Router();
@@ -11,7 +12,7 @@ const url = 'https://api.clashofclans.com/v1';
 /**
  * 查询联赛分组情况
  */
-async function queryLeagueGroup() {
+async function queryLeagueGroup(): Promise<CWLResult> {
   const res = await fetch(`${url}/clans/%23${tag}/currentwar/leaguegroup`, {
     method: 'GET',
     headers: {
@@ -39,6 +40,10 @@ async function queryWars(warTag: string) {
 router.get('/', async (req, res) => {
   const queryRound = req.query.round;
   const leaguegroup = await queryLeagueGroup();
+  if (leaguegroup.reason === 'accessDenied') {
+    res.send(leaguegroup);
+    return;
+  }
   if (leaguegroup.reason === 'notFound') {
     res.send(leaguegroup);
     return;
@@ -64,9 +69,9 @@ router.get('/', async (req, res) => {
     currentIndex = index - 2;
   }
 
-  const { warTags } = queryRound
-    ? rounds[queryRound - 1]
-    : rounds[currentIndex];
+  const round = queryRound ? Number(queryRound) - 1 : currentIndex;
+
+  const { warTags } = rounds[round];
 
   const wars = await Promise.all(
     warTags.map((wTag: string) => {

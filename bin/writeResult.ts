@@ -1,11 +1,11 @@
 import fs from 'node:fs';
-import { formatString2UTC } from '../utils/index.js';
+import { formatString2UTC } from '../utils/index';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
-import { envfile } from '../config/paths.js';
+import { envfile } from '../config/paths';
 import dotenv from 'dotenv';
-import { QueryResult } from '../types/index.js';
+import { QueryResult } from '../types/index';
 
 dotenv.config({
   path: envfile,

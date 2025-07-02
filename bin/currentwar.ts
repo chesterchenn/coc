@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { envfile } from '../config/paths.js';
-import { writeResult } from './writeResult.js';
+import { envfile } from '../config/paths';
+import { writeResult } from './writeResult';
 import fetch from 'node-fetch';
 import { QueryResult } from '../types';
 

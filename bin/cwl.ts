@@ -1,5 +1,5 @@
-import { envfile } from '../config/paths.js';
-import { writeResult } from './writeResult.js';
+import { envfile } from '../config/paths';
+import { writeResult } from './writeResult';
 import dotenv from 'dotenv';
 dotenv.config({
   path: envfile,
@@ -21,7 +21,6 @@ async function queryCWL() {
   }, {});
 
   const params = new URLSearchParams(args);
-  console.log(params);
   const response = await fetch(`${url}/cwl?${params}`);
   return response.json();
 }

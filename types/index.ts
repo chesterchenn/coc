@@ -24,10 +24,13 @@ type Clan = {
   tag: string;
   name: string;
   clanLevel: number;
+  members: Array<Member>;
+};
+
+type CW = {
   attacks: number;
   stars: number;
   destructionPercentage: number;
-  members: Array<Member>;
 };
 
 export type QueryResult = {
@@ -36,6 +39,18 @@ export type QueryResult = {
   preparationTime: string;
   startTime: string;
   endTime: string;
-  clan: Clan;
-  opponent: Clan;
+  clan: Clan & CW;
+  opponent: Clan & CW;
+};
+
+type WarTags = {
+  warTags: Array<string>;
+};
+
+export type CWLResult = {
+  state: State;
+  session: string;
+  clans: Array<Clan>;
+  reason: string;
+  rounds: Array<WarTags>;
 };

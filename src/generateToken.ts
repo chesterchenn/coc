@@ -29,7 +29,7 @@ async function login() {
 /**
  * 查询key列表
  */
-async function queryKeys(cookie) {
+async function queryKeys(cookie: string) {
   const res = await fetch(
     'https://developer.clashofclans.com/api/apikey/list',
     {
@@ -46,7 +46,7 @@ async function queryKeys(cookie) {
 /**
  * 删除指定的 key
  */
-async function revokeKey(cookie, id) {
+async function revokeKey(cookie: string, id: string) {
   const r = await fetch(
     'https://developer.clashofclans.com/api/apikey/revoke',
     {
@@ -64,7 +64,7 @@ async function revokeKey(cookie, id) {
 /**
  * 生成 key
  */
-async function createKey(cookie, data) {
+async function createKey(cookie: string, data: unknown) {
   const res = await fetch(
     'https://developer.clashofclans.com/api/apikey/create',
     {
@@ -86,14 +86,21 @@ router.get('/', async (req, res) => {
   // 登录
   const cookie = await login();
 
+  if (!cookie) {
+    res.send('登陆失败');
+    return;
+  }
+
   // 查询 token 列表
   const list = await queryKeys(cookie);
 
   // 删除指定的 token
-  const keys = list.keys.filter((k) => k.name.includes('auto-api'));
-  const ids = keys.map((k) => k.id);
+  const keys = list.keys.filter((k: Record<string, string>) =>
+    k.name.includes('auto-api'),
+  );
+  const ids = keys.map((k: Record<string, string>) => k.id);
   if (ids.length > 0) {
-    ids.forEach(async (id) => {
+    ids.forEach(async (id: string) => {
       revokeKey(cookie, id);
     });
   }

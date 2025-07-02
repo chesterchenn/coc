@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { rateLimit } from 'express-rate-limit';
-import generateToken from './generateToken.js';
-import cwl from './cwl.js';
-import currentwar from './currentwar.js';
+import generateToken from './generateToken';
+import cwl from './cwl';
+import currentwar from './currentwar';
 
 const envfile = path.resolve(process.cwd(), '.env');
 dotenv.config({
