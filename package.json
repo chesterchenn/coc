@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "cw": "tsx bin/currentwar.ts",
-    "cw:all": "SHOW=all node bin/currentwar.ts",
+    "cw:all": "SHOW=all tsx bin/currentwar.ts",
     "cwl": "tsx bin/cwl.ts",
     "cwl:all": "SHOW=all tsx bin/cwl.ts"
   },
